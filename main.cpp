@@ -16,7 +16,6 @@ int main(int argc, const char *argv[])
     }
   }
 
-
   image.write("output.png");
   return 0;
 }

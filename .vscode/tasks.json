@@ -1,13 +1,27 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build",
       "type": "shell",
-      "command": "g++ main.cpp -o main.exe -I./png++ -I./libpng -L./libpng -lpng -lz",
-      "problemMatcher": [],
+      "label": "C/C++: g++.exe build active file",
+      "command": "g++",
+      "args": [
+        "-g",
+        "${fileBasename}",
+        "-o",
+        "${fileBasenameNoExtension}.exe",
+        "-I./png++",
+        "-I./libpng",
+        "-L./libpng",
+        "-lpng",
+        "-lz"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true
