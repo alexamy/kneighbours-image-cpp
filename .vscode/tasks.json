@@ -6,7 +6,12 @@
     {
       "label": "build",
       "type": "shell",
-      "command": "g++ main.cpp -o main.exe"
+      "command": "g++ main.cpp -o main.exe -I./png++ -I./libpng -L./libpng -lpng -lz",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
