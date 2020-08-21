@@ -70,7 +70,7 @@ int main(int argc, const char *argv[])
 
     // gather new colors from average of pixels
     vector<rgb> color_sum(COLOR_COUNT);
-    vector<uint_32> colors_count(COLOR_COUNT);
+    vector<uint_32> colors_count(COLOR_COUNT, 1);
 
     for(int i = 0; i < size; i++)
     {
@@ -85,7 +85,7 @@ int main(int argc, const char *argv[])
       colors[i].blue = (png::byte)(color_sum[i].blue / colors_count[i]);
     }
   }
-  while((prev_max_distance - max_distance) > EPSILON);
+  while(abs(prev_max_distance - max_distance) > EPSILON);
 
   // write simplified image
   image<rgb_pixel> image_simplified(width, height);
