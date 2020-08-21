@@ -8,14 +8,16 @@
 using namespace std;
 using namespace png;
 
-struct rgb {
+struct rgb
+{
   int red;
   int green;
   int blue;
 };
 
 // get image pixels
-vector<rgb_pixel> get_pixels(image<rgb_pixel> &image) {
+vector<rgb_pixel> get_pixels(image<rgb_pixel> &image)
+{
   uint_32 width = image.get_width();
   uint_32 height = image.get_height();
   vector<rgb_pixel> pixels(width * height);
@@ -31,7 +33,8 @@ vector<rgb_pixel> get_pixels(image<rgb_pixel> &image) {
 
 // take random pixels from image
 template<typename T>
-vector<T> get_random_elements(vector<T> &vec, int count) {
+vector<T> get_random_elements(vector<T> &vec, int count)
+{
   vector<T> colors(count);
   for(int i = 0; i < count; i++)
   {
@@ -41,7 +44,8 @@ vector<T> get_random_elements(vector<T> &vec, int count) {
 }
 
 // convert pixel array to image
-image<rgb_pixel> convert_pixels_to_image(vector<rgb_pixel> pixels, int width, int height) {
+image<rgb_pixel> convert_pixels_to_image(vector<rgb_pixel> &pixels, int width, int height)
+{
   size_t x, y;
   image<rgb_pixel> image(width, height);
   for(int i = 0; i < pixels.size(); i++)
@@ -51,6 +55,30 @@ image<rgb_pixel> convert_pixels_to_image(vector<rgb_pixel> pixels, int width, in
     image.set_pixel(x, y, pixels[i]);
   }
   return image;
+}
+
+// find average of pixels categories
+vector<rgb_pixel> find_averages(vector<rgb_pixel> &pixels, vector<uint_32> &categories)
+{
+  vector<rgb_pixel> colors(COLOR_COUNT);
+  vector<rgb> color_sum(COLOR_COUNT);
+  vector<uint_32> colors_count(COLOR_COUNT, 1);
+
+  for(int i = 0; i < pixels.size(); i++)
+  {
+    color_sum[categories[i]].red   += pixels[i].red;
+    color_sum[categories[i]].green += pixels[i].green;
+    color_sum[categories[i]].blue  += pixels[i].blue;
+    colors_count[categories[i]]++;
+  }
+
+  for(int i = 0; i < COLOR_COUNT; i++) {
+    colors[i].red   = (png::byte)(color_sum[i].red   / colors_count[i]);
+    colors[i].green = (png::byte)(color_sum[i].green / colors_count[i]);
+    colors[i].blue  = (png::byte)(color_sum[i].blue  / colors_count[i]);
+  }
+
+  return colors;
 }
 
 // main
@@ -97,22 +125,7 @@ int main(int argc, const char *argv[])
       if(*curr_distance > max_distance) max_distance = *curr_distance;
     }
 
-    // gather new colors from average of pixels
-    vector<rgb> color_sum(COLOR_COUNT);
-    vector<uint_32> colors_count(COLOR_COUNT, 1);
-
-    for(int i = 0; i < size; i++)
-    {
-      color_sum[categories[i]].red += original[i].red;
-      color_sum[categories[i]].green += original[i].green;
-      color_sum[categories[i]].blue += original[i].blue;
-      colors_count[categories[i]]++;
-    }
-    for(int i = 0; i < COLOR_COUNT; i++) {
-      colors[i].red = (png::byte)(color_sum[i].red / colors_count[i]);
-      colors[i].green = (png::byte)(color_sum[i].green / colors_count[i]);
-      colors[i].blue = (png::byte)(color_sum[i].blue / colors_count[i]);
-    }
+    colors = find_averages(original, categories);
   }
   while(abs(prev_max_distance - max_distance) > EPSILON);
 
