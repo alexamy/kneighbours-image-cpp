@@ -206,6 +206,8 @@ int main(int argc, const char *argv[])
   while(abs(prev_max_distance - max_distance) > PRECISION);
 
   // write simplified image
+  printf("Writing result files\n");
+
   pixel_vector simplified(size);
   for(int i = 0; i < size; i++) {
     simplified[i] = colors[categories[i]];
