@@ -29,6 +29,18 @@ vector<rgb_pixel> get_pixels(image<rgb_pixel> &image) {
   return pixels;
 }
 
+// take random pixels from image
+template<typename T>
+vector<T> get_random_elements(vector<T> &vec, int count) {
+  vector<T> colors(count);
+  for(int i = 0; i < count; i++)
+  {
+    colors[i] = vec[rand() % vec.size()];
+  }
+  return colors;
+}
+
+// main
 int main(int argc, const char *argv[])
 {
   // startup
@@ -45,11 +57,7 @@ int main(int argc, const char *argv[])
   vector<rgb_pixel> original = get_pixels(image_original);
 
   // fill colors with random values
-  vector<rgb_pixel> colors(COLOR_COUNT);
-  for(int i = 0; i < COLOR_COUNT; i++)
-  {
-    colors[i] = original[rand() % size];
-  }
+  vector<rgb_pixel> colors = get_random_elements<rgb_pixel>(original, COLOR_COUNT);
 
   // categorize pixels
   vector<uint_32> categories(size);
