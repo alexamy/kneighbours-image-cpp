@@ -40,6 +40,19 @@ vector<T> get_random_elements(vector<T> &vec, int count) {
   return colors;
 }
 
+// convert pixel array to image
+image<rgb_pixel> convert_pixels_to_image(vector<rgb_pixel> pixels, int width, int height) {
+  size_t x, y;
+  image<rgb_pixel> image(width, height);
+  for(int i = 0; i < pixels.size(); i++)
+  {
+    x = i % width;
+    y = (i - x) / width;
+    image.set_pixel(x, y, pixels[i]);
+  }
+  return image;
+}
+
 // main
 int main(int argc, const char *argv[])
 {
@@ -53,10 +66,7 @@ int main(int argc, const char *argv[])
   uint_32 height = image_original.get_height();
   uint_32 size = width * height;
 
-  // get pixels of input image
   vector<rgb_pixel> original = get_pixels(image_original);
-
-  // fill colors with random values
   vector<rgb_pixel> colors = get_random_elements<rgb_pixel>(original, COLOR_COUNT);
 
   // categorize pixels
@@ -107,14 +117,12 @@ int main(int argc, const char *argv[])
   while(abs(prev_max_distance - max_distance) > EPSILON);
 
   // write simplified image
-  image<rgb_pixel> image_simplified(width, height);
-  size_t x, y;
-  for(int i = 0; i < size; i++)
-  {
-    x = i % width;
-    y = (i - x) / width;
-    image_simplified.set_pixel(x, y, colors[categories[i]]);
+  vector<rgb_pixel> simplified(size);
+  for(int i = 0; i < size; i++) {
+    simplified[i] = colors[categories[i]];
   }
+
+  image<rgb_pixel> image_simplified = convert_pixels_to_image(simplified, width, height);
   image_simplified.write("output.png");
 
   return 0;
