@@ -81,6 +81,12 @@ vector<rgb_pixel> find_averages(vector<rgb_pixel> &pixels, vector<uint_32> &cate
   return colors;
 }
 
+// find distance between pixels
+inline uint_32 distance_pixels(rgb_pixel p1, rgb_pixel p2)
+{
+  return abs(p1.red - p2.red) + abs(p1.green - p2.green) + abs(p1.blue - p2.blue);
+}
+
 // main
 int main(int argc, const char *argv[])
 {
@@ -117,7 +123,7 @@ int main(int argc, const char *argv[])
       // find distances to each category
       for(int c = 0; c < COLOR_COUNT; c++)
       {
-        distances[c] = abs(original[i].red - colors[c].red) + abs(original[i].green - colors[c].green) + abs(original[i].blue - colors[c].blue);
+        distances[c] = distance_pixels(original[i], colors[c]);
       }
       // assign new category
       curr_distance = min_element(distances.begin(), distances.end());
