@@ -8,6 +8,9 @@
 using namespace std;
 using namespace png;
 
+typedef vector<rgb_pixel> pixel_vector;
+typedef image<rgb_pixel> rgb_image;
+
 struct rgb
 {
   int red;
@@ -16,11 +19,11 @@ struct rgb
 };
 
 // get image pixels
-vector<rgb_pixel> get_pixels(image<rgb_pixel> &image)
+pixel_vector get_pixels(rgb_image &image)
 {
   uint_32 width = image.get_width();
   uint_32 height = image.get_height();
-  vector<rgb_pixel> pixels(width * height);
+  pixel_vector pixels(width * height);
   for(int i = 0; i < width; i++)
   {
     for(int j = 0; j < height; j++)
@@ -44,10 +47,10 @@ vector<T> get_random_elements(vector<T> &vec, int count)
 }
 
 // convert pixel array to image
-image<rgb_pixel> convert_pixels_to_image(vector<rgb_pixel> &pixels, int width, int height)
+rgb_image convert_pixels_to_image(pixel_vector &pixels, int width, int height)
 {
   size_t x, y;
-  image<rgb_pixel> image(width, height);
+  rgb_image image(width, height);
   for(int i = 0; i < pixels.size(); i++)
   {
     x = i % width;
@@ -58,9 +61,9 @@ image<rgb_pixel> convert_pixels_to_image(vector<rgb_pixel> &pixels, int width, i
 }
 
 // find average of pixels categories
-vector<rgb_pixel> find_averages(vector<rgb_pixel> &pixels, vector<uint_32> &categories)
+pixel_vector find_averages(pixel_vector &pixels, vector<uint_32> &categories)
 {
-  vector<rgb_pixel> colors(COLOR_COUNT);
+  pixel_vector colors(COLOR_COUNT);
   vector<rgb> color_sum(COLOR_COUNT);
   vector<uint_32> colors_count(COLOR_COUNT, 1);
 
@@ -88,7 +91,7 @@ inline uint_32 distance_pixels(rgb_pixel &p1, rgb_pixel &p2)
 }
 
 // assign categories for pixels
-int assign_categories(vector<rgb_pixel> &pixels, vector<rgb_pixel> &colors, vector<uint_32> &categories)
+int assign_categories(pixel_vector &pixels, pixel_vector &colors, vector<uint_32> &categories)
 {
   vector<uint_32> distances(COLOR_COUNT);
   vector<uint_32>::iterator curr_distance;
@@ -117,14 +120,14 @@ int main(int argc, const char *argv[])
   string file_name = argv[1];
 
   // load image
-  image<rgb_pixel> image_original(file_name);
+  rgb_image image_original(file_name);
   uint_32 width = image_original.get_width();
   uint_32 height = image_original.get_height();
   uint_32 size = width * height;
 
   // simplify
-  vector<rgb_pixel> pixels = get_pixels(image_original);
-  vector<rgb_pixel> colors = get_random_elements<rgb_pixel>(pixels, COLOR_COUNT);
+  pixel_vector pixels = get_pixels(image_original);
+  pixel_vector colors = get_random_elements<rgb_pixel>(pixels, COLOR_COUNT);
   vector<uint_32> categories(size);
 
   int prev_max_distance, max_distance = 0;
@@ -140,12 +143,12 @@ int main(int argc, const char *argv[])
   while(abs(prev_max_distance - max_distance) > PRECISION);
 
   // write simplified image
-  vector<rgb_pixel> simplified(size);
+  pixel_vector simplified(size);
   for(int i = 0; i < size; i++) {
     simplified[i] = colors[categories[i]];
   }
 
-  image<rgb_pixel> image_simplified = convert_pixels_to_image(simplified, width, height);
+  rgb_image image_simplified = convert_pixels_to_image(simplified, width, height);
   image_simplified.write("output.png");
 
   return 0;
