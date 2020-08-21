@@ -14,6 +14,21 @@ struct rgb {
   int blue;
 };
 
+// get image pixels
+vector<rgb_pixel> get_pixels(image<rgb_pixel> &image) {
+  uint_32 width = image.get_width();
+  uint_32 height = image.get_height();
+  vector<rgb_pixel> pixels(width * height);
+  for(int i = 0; i < width; i++)
+  {
+    for(int j = 0; j < height; j++)
+    {
+      pixels[i + j * width] = image.get_pixel(i, j);
+    }
+  }
+  return pixels;
+}
+
 int main(int argc, const char *argv[])
 {
   // startup
@@ -27,14 +42,7 @@ int main(int argc, const char *argv[])
   uint_32 size = width * height;
 
   // get pixels of input image
-  vector<rgb_pixel> original(size);
-  for(int i = 0; i < width; i++)
-  {
-    for(int j = 0; j < height; j++)
-    {
-      original[i + j * width] = image_original.get_pixel(i, j);
-    }
-  }
+  vector<rgb_pixel> original = get_pixels(image_original);
 
   // fill colors with random values
   vector<rgb_pixel> colors(COLOR_COUNT);
