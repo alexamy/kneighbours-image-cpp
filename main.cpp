@@ -48,9 +48,12 @@ int main(int argc, const char *argv[])
   vector<uint_32> distances(COLOR_COUNT);
   vector<uint_32>::iterator curr_distance;
   int max_distance, prev_max_distance;
+  int step = 0;
 
   do
   {
+    printf("Run #%d\n", ++step);
+
     prev_max_distance = max_distance;
     max_distance = 0;
 
