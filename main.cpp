@@ -3,7 +3,7 @@
 #include "png++/png.hpp"
 
 #define COLOR_COUNT 8
-#define EPSILON 5
+#define PRECISION 5
 
 using namespace std;
 using namespace png;
@@ -127,7 +127,7 @@ int main(int argc, const char *argv[])
   vector<rgb_pixel> colors = get_random_elements<rgb_pixel>(pixels, COLOR_COUNT);
   vector<uint_32> categories(size);
 
-  int max_distance, prev_max_distance;
+  int prev_max_distance, max_distance = 0;
   int step = 0;
 
   do
@@ -137,7 +137,7 @@ int main(int argc, const char *argv[])
     max_distance = assign_categories(pixels, colors, categories);
     colors = find_averages(pixels, categories);
   }
-  while(abs(prev_max_distance - max_distance) > EPSILON);
+  while(abs(prev_max_distance - max_distance) > PRECISION);
 
   // write simplified image
   vector<rgb_pixel> simplified(size);
