@@ -10,23 +10,22 @@ int main(int argc, const char *argv[])
   uint_32 width = image_original.get_width();
   uint_32 height = image_original.get_height();
 
-  vector<vector<rgb_pixel>> original(width);
+  vector<rgb_pixel> original(width * height);
   for(int i = 0; i < width; i++)
   {
-    original[i] = vector<rgb_pixel>(height);
     for(int j = 0; j < height; j++)
     {
-      original[i][j] = image_original.get_pixel(i, j);
+      original[i + j * width] = image_original.get_pixel(i, j);
     }
   }
 
   image<rgb_pixel> image_simplified(width, height);
-  for(int i = 0; i < width; i++)
+  size_t x, y;
+  for(int i = 0; i < original.size(); i++)
   {
-    for(int j = 0; j < height; j++)
-    {
-      image_simplified.set_pixel(i, j, original[i][j]);
-    }
+    x = i % width;
+    y = (i - x) / width;
+    image_simplified.set_pixel(x, y, original[i]);
   }
 
   image_simplified.write("output.png");
