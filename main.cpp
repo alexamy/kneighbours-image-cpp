@@ -132,6 +132,18 @@ void fill_rectangle(rgb_image &image, rgb_pixel &color, dimension d)
   }
 }
 
+// copy part of image in another image
+void copy_image_part(rgb_image &source, rgb_image &target, dimension ds, dimension dt)
+{
+  for(int i = ds.x; i < ds.x + ds.width; i++)
+  {
+    for(int j = ds.y; j < ds.y + ds.height; j++)
+    {
+      target.set_pixel(dt.x + i, dt.y + j, source.get_pixel(i, j));
+    }
+  }
+}
+
 // setup collage from images and colors
 // original and processed must be equal size
 rgb_image make_collage(pixel_vector &colors, rgb_image &original, rgb_image &processed)
@@ -142,11 +154,12 @@ rgb_image make_collage(pixel_vector &colors, rgb_image &original, rgb_image &pro
 
   rgb_image result(width * 2, height * 2);
 
-  // assign colors
   for(int i = 0; i < colors.size(); i++)
   {
     fill_rectangle(result, colors[i], { i * stripe_length, 0, stripe_length, height * 2 });
   }
+  copy_image_part(original,  result, { 0, 0, width, height }, { width, 0 });
+  copy_image_part(processed, result, { 0, 0, width, height }, { width, height });
 
   return result;
 }
