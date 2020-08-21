@@ -212,10 +212,12 @@ int main(int argc, const char *argv[])
   }
 
   rgb_image image_simplified = convert_pixels_to_image(simplified, width, height);
-  image_simplified.write("output.png");
+  string simplified_name = file_name.substr(0, file_name.find(".png")) + "_simplified.png";
+  image_simplified.write(simplified_name);
 
   rgb_image image_collage = make_collage(colors, image_original, image_simplified);
-  image_collage.write("output_collage.png");
+  string collage_name = file_name.substr(0, file_name.find(".png")) + "_simplified_collage.png";
+  image_collage.write(collage_name);
 
   return 0;
 }
