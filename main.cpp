@@ -15,7 +15,7 @@ int main(int argc, const char *argv[])
 {
   // constants
   int color_count = 8;
-  int epsilon = 100;
+  int epsilon = 5;
   string file_name = "input.png";
 
   // load image
@@ -46,11 +46,12 @@ int main(int argc, const char *argv[])
   vector<int> categories(size);
   vector<int> distances(color_count);
   vector<int>::iterator curr_distance;
-  int max_distance;
+  int max_distance, prev_max_distance;
   int r, g, b;
 
   do
   {
+    prev_max_distance = max_distance;
     max_distance = 0;
 
     // every pixel
@@ -85,7 +86,7 @@ int main(int argc, const char *argv[])
       colors[i].blue = (png::byte)(color_sum[i].blue / colors_count[i]);
     }
   }
-  while(max_distance > epsilon);
+  while((prev_max_distance - max_distance) > epsilon);
 
   // write simplified image
   image<rgb_pixel> image_simplified(width, height);
