@@ -82,9 +82,31 @@ vector<rgb_pixel> find_averages(vector<rgb_pixel> &pixels, vector<uint_32> &cate
 }
 
 // find distance between pixels
-inline uint_32 distance_pixels(rgb_pixel p1, rgb_pixel p2)
+inline uint_32 distance_pixels(rgb_pixel &p1, rgb_pixel &p2)
 {
   return abs(p1.red - p2.red) + abs(p1.green - p2.green) + abs(p1.blue - p2.blue);
+}
+
+// assign categories for pixels
+int assign_categories(vector<rgb_pixel> &pixels, vector<rgb_pixel> &colors, vector<uint_32> &categories)
+{
+  vector<uint_32> distances(COLOR_COUNT);
+  vector<uint_32>::iterator curr_distance;
+  int max_distance = 0;
+
+  for(int i = 0; i < pixels.size(); i++)
+  {
+    for(int c = 0; c < COLOR_COUNT; c++)
+    {
+      distances[c] = distance_pixels(pixels[i], colors[c]);
+    }
+
+    curr_distance = min_element(distances.begin(), distances.end());
+    categories[i] = distance(distances.begin(), curr_distance);
+    if(*curr_distance > max_distance) max_distance = *curr_distance;
+  }
+
+  return max_distance;
 }
 
 // main
@@ -100,38 +122,20 @@ int main(int argc, const char *argv[])
   uint_32 height = image_original.get_height();
   uint_32 size = width * height;
 
-  vector<rgb_pixel> original = get_pixels(image_original);
-  vector<rgb_pixel> colors = get_random_elements<rgb_pixel>(original, COLOR_COUNT);
-
-  // categorize pixels
+  // simplify
+  vector<rgb_pixel> pixels = get_pixels(image_original);
+  vector<rgb_pixel> colors = get_random_elements<rgb_pixel>(pixels, COLOR_COUNT);
   vector<uint_32> categories(size);
-  vector<uint_32> distances(COLOR_COUNT);
-  vector<uint_32>::iterator curr_distance;
+
   int max_distance, prev_max_distance;
   int step = 0;
 
   do
   {
     printf("Run #%d\n", ++step);
-
     prev_max_distance = max_distance;
-    max_distance = 0;
-
-    // find category for every pixel
-    for(int i = 0; i < size; i++)
-    {
-      // find distances to each category
-      for(int c = 0; c < COLOR_COUNT; c++)
-      {
-        distances[c] = distance_pixels(original[i], colors[c]);
-      }
-      // assign new category
-      curr_distance = min_element(distances.begin(), distances.end());
-      categories[i] = distance(distances.begin(), curr_distance);
-      if(*curr_distance > max_distance) max_distance = *curr_distance;
-    }
-
-    colors = find_averages(original, categories);
+    max_distance = assign_categories(pixels, colors, categories);
+    colors = find_averages(pixels, categories);
   }
   while(abs(prev_max_distance - max_distance) > EPSILON);
 
