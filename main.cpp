@@ -16,7 +16,7 @@ int main(int argc, const char *argv[])
   // constants
   int color_count = 8;
   int epsilon = 5;
-  string file_name = "input.png";
+  string file_name = argv[1];
 
   // load image
   image<rgb_pixel> image_original(file_name);
