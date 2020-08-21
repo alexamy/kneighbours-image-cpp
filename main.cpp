@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "png++/png.hpp"
 
 using namespace std;
@@ -6,8 +7,13 @@ using namespace png;
 
 int main(int argc, const char *argv[])
 {
+  // constants
+  int color_count = 8;
+  int epsilon = 8;
+  string file_name = "input.png";
+
   // load image
-  image<rgb_pixel> image_original("input.png");
+  image<rgb_pixel> image_original(file_name);
   uint_32 width = image_original.get_width();
   uint_32 height = image_original.get_height();
   uint_32 size = width * height;
@@ -22,17 +28,49 @@ int main(int argc, const char *argv[])
     }
   }
 
-  // simplify pixels
-  vector<rgb_pixel> simplified(original);
+  // fill colors with random values
+  vector<rgb_pixel> colors(color_count);
+
+  for(int i = 0; i < color_count; i++)
+  {
+    colors[i] = original[rand() % size];
+  }
+
+  // categorize pixels
+  vector<int> categories(size);
+  vector<int> distances(color_count);
+  vector<int>::iterator curr_distance;
+  int max_distance = 0;
+
+  do
+  {
+    // every pixel
+    for(int i = 0; i < size; i++)
+    {
+      // find distances to each category
+      for(int c = 0; c < color_count; c++)
+      {
+        distances[c] = abs(original[i].red - colors[c].red) + abs(original[i].green - colors[c].green) + abs(original[i].blue - colors[c].blue);
+      }
+      // set max distance
+      curr_distance = min_element(distances.begin(), distances.end());
+      if(*curr_distance > max_distance) max_distance = *curr_distance;
+      // assign new category
+      categories[i] = distance(distances.begin(), curr_distance);
+    }
+
+    // gather new colors from average of pixels
+  }
+  while(false);
 
   // write simplified image
   image<rgb_pixel> image_simplified(width, height);
   size_t x, y;
-  for(int i = 0; i < simplified.size(); i++)
+  for(int i = 0; i < size; i++)
   {
     x = i % width;
     y = (i - x) / width;
-    image_simplified.set_pixel(x, y, simplified[i]);
+    image_simplified.set_pixel(x, y, colors[categories[i]]);
   }
 
   image_simplified.write("output.png");
