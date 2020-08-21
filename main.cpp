@@ -2,6 +2,9 @@
 #include <algorithm>
 #include "png++/png.hpp"
 
+#define COLOR_COUNT 8
+#define EPSILON 5
+
 using namespace std;
 using namespace png;
 
@@ -13,13 +16,9 @@ struct rgb {
 
 int main(int argc, const char *argv[])
 {
-  // constants
-  int color_count = 8;
-  int epsilon = 5;
-  string file_name = argv[1];
-
-  // randomize
+  // startup
   srand(time(NULL));
+  string file_name = argv[1];
 
   // load image
   image<rgb_pixel> image_original(file_name);
@@ -38,43 +37,40 @@ int main(int argc, const char *argv[])
   }
 
   // fill colors with random values
-  vector<rgb_pixel> colors(color_count);
-
-  for(int i = 0; i < color_count; i++)
+  vector<rgb_pixel> colors(COLOR_COUNT);
+  for(int i = 0; i < COLOR_COUNT; i++)
   {
     colors[i] = original[rand() % size];
   }
 
   // categorize pixels
   vector<uint_32> categories(size);
-  vector<uint_32> distances(color_count);
+  vector<uint_32> distances(COLOR_COUNT);
   vector<uint_32>::iterator curr_distance;
   int max_distance, prev_max_distance;
-  int r, g, b;
 
   do
   {
     prev_max_distance = max_distance;
     max_distance = 0;
 
-    // every pixel
+    // find category for every pixel
     for(int i = 0; i < size; i++)
     {
       // find distances to each category
-      for(int c = 0; c < color_count; c++)
+      for(int c = 0; c < COLOR_COUNT; c++)
       {
         distances[c] = abs(original[i].red - colors[c].red) + abs(original[i].green - colors[c].green) + abs(original[i].blue - colors[c].blue);
       }
-      // set max distance
-      curr_distance = min_element(distances.begin(), distances.end());
-      if(*curr_distance > max_distance) max_distance = *curr_distance;
       // assign new category
+      curr_distance = min_element(distances.begin(), distances.end());
       categories[i] = distance(distances.begin(), curr_distance);
+      if(*curr_distance > max_distance) max_distance = *curr_distance;
     }
 
     // gather new colors from average of pixels
-    vector<rgb> color_sum(color_count);
-    vector<uint_32> colors_count(color_count);
+    vector<rgb> color_sum(COLOR_COUNT);
+    vector<uint_32> colors_count(COLOR_COUNT);
 
     for(int i = 0; i < size; i++)
     {
@@ -83,13 +79,13 @@ int main(int argc, const char *argv[])
       color_sum[categories[i]].blue += original[i].blue;
       colors_count[categories[i]]++;
     }
-    for(int i = 0; i < color_count; i++) {
+    for(int i = 0; i < COLOR_COUNT; i++) {
       colors[i].red = (png::byte)(color_sum[i].red / colors_count[i]);
       colors[i].green = (png::byte)(color_sum[i].green / colors_count[i]);
       colors[i].blue = (png::byte)(color_sum[i].blue / colors_count[i]);
     }
   }
-  while((prev_max_distance - max_distance) > epsilon);
+  while((prev_max_distance - max_distance) > EPSILON);
 
   // write simplified image
   image<rgb_pixel> image_simplified(width, height);
@@ -100,9 +96,7 @@ int main(int argc, const char *argv[])
     y = (i - x) / width;
     image_simplified.set_pixel(x, y, colors[categories[i]]);
   }
-
   image_simplified.write("output.png");
 
-  // exit
   return 0;
 }
