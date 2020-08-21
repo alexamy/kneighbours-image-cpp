@@ -30,6 +30,7 @@ int main(int argc, const char *argv[])
 
   // fill colors with random values
   vector<rgb_pixel> colors(color_count);
+  vector<int> colors_count(color_count);
 
   for(int i = 0; i < color_count; i++)
   {
@@ -60,6 +61,21 @@ int main(int argc, const char *argv[])
     }
 
     // gather new colors from average of pixels
+    colors = vector<rgb_pixel>(color_count);
+    colors_count = vector<int>(color_count);
+
+    for(int i = 0; i < size; i++)
+    {
+      colors[categories[i]].red += original[i].red;
+      colors[categories[i]].green += original[i].green;
+      colors[categories[i]].blue += original[i].blue;
+      colors_count[categories[i]]++;
+    }
+    for(int i = 0; i < color_count; i++) {
+      colors[i].red /= colors_count[i];
+      colors[i].green /= colors_count[i];
+      colors[i].blue /= colors_count[i];
+    }
   }
   while(false);
 
