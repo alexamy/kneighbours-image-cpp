@@ -5,11 +5,17 @@
 using namespace std;
 using namespace png;
 
+struct rgb {
+  int red;
+  int green;
+  int blue;
+};
+
 int main(int argc, const char *argv[])
 {
   // constants
   int color_count = 8;
-  int epsilon = 8;
+  int epsilon = 100;
   string file_name = "input.png";
 
   // load image
@@ -30,7 +36,6 @@ int main(int argc, const char *argv[])
 
   // fill colors with random values
   vector<rgb_pixel> colors(color_count);
-  vector<int> colors_count(color_count);
 
   for(int i = 0; i < color_count; i++)
   {
@@ -41,10 +46,13 @@ int main(int argc, const char *argv[])
   vector<int> categories(size);
   vector<int> distances(color_count);
   vector<int>::iterator curr_distance;
-  int max_distance = 0;
+  int max_distance;
+  int r, g, b;
 
   do
   {
+    max_distance = 0;
+
     // every pixel
     for(int i = 0; i < size; i++)
     {
@@ -61,23 +69,23 @@ int main(int argc, const char *argv[])
     }
 
     // gather new colors from average of pixels
-    colors = vector<rgb_pixel>(color_count);
-    colors_count = vector<int>(color_count);
+    vector<rgb> color_sum(color_count);
+    vector<int> colors_count(color_count);
 
     for(int i = 0; i < size; i++)
     {
-      colors[categories[i]].red += original[i].red;
-      colors[categories[i]].green += original[i].green;
-      colors[categories[i]].blue += original[i].blue;
+      color_sum[categories[i]].red += original[i].red;
+      color_sum[categories[i]].green += original[i].green;
+      color_sum[categories[i]].blue += original[i].blue;
       colors_count[categories[i]]++;
     }
     for(int i = 0; i < color_count; i++) {
-      colors[i].red /= colors_count[i];
-      colors[i].green /= colors_count[i];
-      colors[i].blue /= colors_count[i];
+      colors[i].red = (png::byte)(color_sum[i].red / colors_count[i]);
+      colors[i].green = (png::byte)(color_sum[i].green / colors_count[i]);
+      colors[i].blue = (png::byte)(color_sum[i].blue / colors_count[i]);
     }
   }
-  while(false);
+  while(max_distance > epsilon);
 
   // write simplified image
   image<rgb_pixel> image_simplified(width, height);
