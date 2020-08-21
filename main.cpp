@@ -13,9 +13,17 @@ typedef image<rgb_pixel> rgb_image;
 
 struct rgb
 {
-  int red;
-  int green;
-  int blue;
+  uint_32 red;
+  uint_32 green;
+  uint_32 blue;
+};
+
+struct dimension
+{
+  uint_32 x;
+  uint_32 y;
+  uint_32 width;
+  uint_32 height;
 };
 
 // get image pixels
@@ -112,6 +120,37 @@ int assign_categories(pixel_vector &pixels, pixel_vector &colors, vector<uint_32
   return max_distance;
 }
 
+// fill rectangle in image
+void fill_rectangle(rgb_image &image, rgb_pixel &color, dimension d)
+{
+  for(int i = d.x; i < d.x + d.width; i++)
+  {
+    for(int j = d.y; j < d.y + d.height; j++)
+    {
+      image.set_pixel(i, j, color);
+    }
+  }
+}
+
+// setup collage from images and colors
+// original and processed must be equal size
+rgb_image make_collage(pixel_vector &colors, rgb_image &original, rgb_image &processed)
+{
+  uint_32 width = original.get_width();
+  uint_32 height = original.get_height();
+  uint_32 stripe_length = width / COLOR_COUNT;
+
+  rgb_image result(width * 2, height * 2);
+
+  // assign colors
+  for(int i = 0; i < colors.size(); i++)
+  {
+    fill_rectangle(result, colors[i], { i * stripe_length, 0, stripe_length, height * 2 });
+  }
+
+  return result;
+}
+
 // main
 int main(int argc, const char *argv[])
 {
@@ -150,6 +189,9 @@ int main(int argc, const char *argv[])
 
   rgb_image image_simplified = convert_pixels_to_image(simplified, width, height);
   image_simplified.write("output.png");
+
+  rgb_image image_collage = make_collage(colors, image_original, image_simplified);
+  image_collage.write("output_collage.png");
 
   return 0;
 }

@@ -8,6 +8,7 @@
     "xstring": "cpp",
     "vector": "cpp",
     "iostream": "cpp",
-    "cstdlib": "cpp"
+    "cstdlib": "cpp",
+    "type_traits": "cpp"
   }
 }
