@@ -18,6 +18,9 @@ int main(int argc, const char *argv[])
   int epsilon = 5;
   string file_name = argv[1];
 
+  // randomize
+  srand(time(NULL));
+
   // load image
   image<rgb_pixel> image_original(file_name);
   uint_32 width = image_original.get_width();
@@ -43,9 +46,9 @@ int main(int argc, const char *argv[])
   }
 
   // categorize pixels
-  vector<int> categories(size);
-  vector<int> distances(color_count);
-  vector<int>::iterator curr_distance;
+  vector<uint_32> categories(size);
+  vector<uint_32> distances(color_count);
+  vector<uint_32>::iterator curr_distance;
   int max_distance, prev_max_distance;
   int r, g, b;
 
@@ -71,7 +74,7 @@ int main(int argc, const char *argv[])
 
     // gather new colors from average of pixels
     vector<rgb> color_sum(color_count);
-    vector<int> colors_count(color_count);
+    vector<uint_32> colors_count(color_count);
 
     for(int i = 0; i < size; i++)
     {
