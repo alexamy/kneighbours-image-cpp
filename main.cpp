@@ -169,10 +169,21 @@ int main(int argc, const char *argv[])
 {
   // startup
   srand(time(NULL));
-  string file_name = argv[1];
+  string file_name;
+  rgb_image image_original;
 
   // load image
-  rgb_image image_original(file_name);
+  try
+  {
+    file_name = string(argv[1]);
+    image_original = rgb_image(file_name);
+  }
+  catch(...)
+  {
+    printf("Provide PNG image as first argument\n");
+    return -1;
+  }
+
   uint_32 width = image_original.get_width();
   uint_32 height = image_original.get_height();
   uint_32 size = width * height;
