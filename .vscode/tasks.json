@@ -7,10 +7,11 @@
       "command": "g++",
       "args": [
         "-O3",
+        "-static",
         "-g",
-        "${fileBasename}",
+        "main.cpp",
         "-o",
-        "${fileBasenameNoExtension}.exe",
+        "kmeans-png.exe",
         "-I./png++",
         "-I./libpng",
         "-L./libpng",
