@@ -11,7 +11,7 @@
         "-g",
         "main.cpp",
         "-o",
-        "kmeans-png.exe",
+        "main.exe",
         "-I/c/mingw64/vendor/png++",
         "-I/c/mingw64/vendor/libpng",
         "-L/c/mingw64/vendor/libpng",
