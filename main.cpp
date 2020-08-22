@@ -151,13 +151,13 @@ rgb_image make_collage(pixel_vector &colors, rgb_image &original, rgb_image &pro
 {
   uint_32 width = original.get_width();
   uint_32 height = original.get_height();
-  uint_32 stripe_length = width / COLOR_COUNT;
+  uint_32 stripe_width = width / COLOR_COUNT;
 
   rgb_image result(width * 2, height * 2);
 
   for(int i = 0; i < colors.size(); i++)
   {
-    fill_rectangle(result, colors[i], { i * stripe_length, 0, stripe_length, height * 2 });
+    fill_rectangle(result, colors[i], { i * stripe_width, 0, stripe_width, height * 2 });
   }
   copy_image_part(original,  result, { 0, 0, width, height }, { width, 0 });
   copy_image_part(processed, result, { 0, 0, width, height }, { width, height });
