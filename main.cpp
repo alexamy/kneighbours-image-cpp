@@ -74,7 +74,8 @@ pixel_vector find_averages(pixel_vector &pixels, vector<uint_32> &categories)
 {
   pixel_vector colors(COLOR_COUNT);
   vector<rgb> color_sum(COLOR_COUNT);
-  vector<uint_32> colors_count(COLOR_COUNT, 1);
+  vector<uint_32> colors_count(COLOR_COUNT, 0);
+  uint_32 count;
 
   for(int i = 0; i < pixels.size(); i++)
   {
@@ -85,9 +86,10 @@ pixel_vector find_averages(pixel_vector &pixels, vector<uint_32> &categories)
   }
 
   for(int i = 0; i < COLOR_COUNT; i++) {
-    colors[i].red   = (png::byte)(color_sum[i].red   / colors_count[i]);
-    colors[i].green = (png::byte)(color_sum[i].green / colors_count[i]);
-    colors[i].blue  = (png::byte)(color_sum[i].blue  / colors_count[i]);
+    count = colors_count[i] ? colors_count[i] : 1;
+    colors[i].red   = (png::byte)(color_sum[i].red   / count);
+    colors[i].green = (png::byte)(color_sum[i].green / count);
+    colors[i].blue  = (png::byte)(color_sum[i].blue  / count);
   }
 
   return colors;
