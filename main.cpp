@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <conio.h>
 #include "png++/png.hpp"
 
 #define COLOR_COUNT 8
@@ -181,6 +182,8 @@ int main(int argc, const char *argv[])
   catch(...)
   {
     printf("Provide PNG image as first argument\n");
+    printf("Press any key...\n");
+    getch();
     return -1;
   }
 
