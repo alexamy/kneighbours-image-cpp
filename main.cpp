@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include <conio.h>
 #include "png.hpp"
 
@@ -104,23 +103,25 @@ inline uint_32 distance_pixels(rgb_pixel &p1, rgb_pixel &p2)
 // assign categories for pixels
 int assign_categories(pixel_vector &pixels, pixel_vector &colors, vector<uint_32> &categories)
 {
-  vector<uint_32> distances(COLOR_COUNT);
-  vector<uint_32>::iterator curr_distance;
-  int max_distance = 0;
+  int curr_distance, min_distance, max_distance_all = 0;
 
   for(int i = 0; i < pixels.size(); i++)
   {
-    for(int c = 0; c < COLOR_COUNT; c++)
+    min_distance = 255 * 3;
+    for(int c = 0; c < colors.size(); c++)
     {
-      distances[c] = distance_pixels(pixels[i], colors[c]);
+      curr_distance = distance_pixels(pixels[i], colors[c]);
+      if(curr_distance < min_distance)
+      {
+        min_distance = curr_distance;
+        categories[i] = c;
+      }
     }
 
-    curr_distance = min_element(distances.begin(), distances.end());
-    categories[i] = distance(distances.begin(), curr_distance);
-    if(*curr_distance > max_distance) max_distance = *curr_distance;
+    if(min_distance > max_distance_all) max_distance_all = min_distance;
   }
 
-  return max_distance;
+  return max_distance_all;
 }
 
 // fill rectangle in image
