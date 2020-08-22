@@ -3,8 +3,8 @@
         {
             "name": "Win32",
             "includePath": [
-                "./libpng",
-                "./png++",
+                "C:\\mingw64\\vendor\\libpng",
+                "C:\\mingw64\\vendor\\png++",
                 "${workspaceFolder}",
                 "${default}"
             ],

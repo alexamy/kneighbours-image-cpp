@@ -12,9 +12,9 @@
         "main.cpp",
         "-o",
         "kmeans-png.exe",
-        "-I./png++",
-        "-I./libpng",
-        "-L./libpng",
+        "-I/c/mingw64/vendor/png++",
+        "-I/c/mingw64/vendor/libpng",
+        "-L/c/mingw64/vendor/libpng",
         "-lpng",
         "-lz"
       ],

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <conio.h>
-#include "png++/png.hpp"
+#include "png.hpp"
 
 #define COLOR_COUNT 8
 #define PRECISION 5
