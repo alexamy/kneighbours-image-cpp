@@ -2,3 +2,4 @@ libpng
 png++
 *.exe
 *.png
+!input.png
