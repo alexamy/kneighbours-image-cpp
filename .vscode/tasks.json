@@ -3,7 +3,28 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "C/C++: g++.exe build active file",
+      "label": "gcc build",
+      "command": "gcc",
+      "args": [
+        // "-O3",
+        // "-static",
+        "-g",
+        "main.c",
+        "-o",
+        "main.exe",
+        // "-lpng",
+        "-lz"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "type": "shell",
+      "label": "g++ build",
       "command": "g++",
       "args": [
         "-O3",
