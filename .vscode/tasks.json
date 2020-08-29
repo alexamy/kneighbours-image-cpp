@@ -6,13 +6,13 @@
       "label": "gcc build",
       "command": "gcc",
       "args": [
-        // "-O3",
-        // "-static",
         "-g",
         "main.c",
         "-o",
         "main.exe",
-        // "-lpng",
+        "-I/c/mingw64/vendor/libpng",
+        "-L/c/mingw64/vendor/libpng",
+        "-lpng",
         "-lz"
       ],
       "options": {
@@ -20,7 +20,11 @@
       },
       "problemMatcher": [
         "$gcc"
-      ]
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "type": "shell",
@@ -45,10 +49,7 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "group": "build"
     }
   ]
 }

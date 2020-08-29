@@ -9,7 +9,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/main.exe",
-      "args": ["input.png"],
+      "args": ["input.png", "output.png"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
