@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <png.h>
 
-int width, height;
-png_byte color_type;
-png_byte bit_depth;
-png_bytep *row_pointers = NULL;
-
-void read_png_file(char *filename) {
+void read_png_file(
+  char *filename,
+  png_bytep *row_pointers,
+  png_uint_32 width,
+  png_uint_32 height,
+  png_byte color_type,
+  png_byte bit_depth
+) {
   FILE *fp = fopen(filename, "rb");
 
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -69,7 +71,12 @@ void read_png_file(char *filename) {
   png_destroy_read_struct(&png, &info, NULL);
 }
 
-void write_png_file(char *filename) {
+void write_png_file(
+  char *filename,
+  png_bytep *row_pointers,
+  png_uint_32 width,
+  png_uint_32 height
+) {
   int y;
 
   FILE *fp = fopen(filename, "wb");
@@ -117,7 +124,11 @@ void write_png_file(char *filename) {
   png_destroy_write_struct(&png, &info);
 }
 
-void process_png_file() {
+void process_png_file(
+  png_bytep *row_pointers,
+  png_uint_32 width,
+  png_uint_32 height
+) {
   for(int y = 0; y < height; y++) {
     png_bytep row = row_pointers[y];
     for(int x = 0; x < width; x++) {
@@ -131,9 +142,14 @@ void process_png_file() {
 int main(int argc, char *argv[]) {
   if(argc != 3) abort();
 
-  read_png_file(argv[1]);
-  process_png_file();
-  write_png_file(argv[2]);
+  int width, height;
+  png_byte color_type;
+  png_byte bit_depth;
+  png_bytep *row_pointers = NULL;
+
+  read_png_file(argv[1], row_pointers, width, height, color_type, bit_depth);
+  process_png_file(row_pointers, width, height);
+  write_png_file(argv[2], row_pointers, width, height);
 
   return 0;
 }
