@@ -10,8 +10,8 @@
         "main.c",
         "-o",
         "main.exe",
-        "-I/c/mingw64/vendor/libpng",
-        "-L/c/mingw64/vendor/libpng",
+        "-I${env:MINGW_PATH}/vendor/libpng",
+        "-L${env:MINGW_PATH}/vendor/libpng",
         "-lpng",
         "-lz"
       ],
@@ -37,9 +37,9 @@
         "main.cpp",
         "-o",
         "main.exe",
-        "-I/c/mingw64/vendor/png++",
-        "-I/c/mingw64/vendor/libpng",
-        "-L/c/mingw64/vendor/libpng",
+        "-I${env:MINGW_PATH}/vendor/png++",
+        "-I${env:MINGW_PATH}/vendor/libpng",
+        "-L${env:MINGW_PATH}/vendor/libpng",
         "-lpng",
         "-lz"
       ],

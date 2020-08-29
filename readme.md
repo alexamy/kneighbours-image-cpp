@@ -1,3 +1,9 @@
+# compilation
+
+for successful compilation add MINGW_PATH environmental variable.
+e. g. (bash for windows): `/c/mingw64`
+
+
 load *libpng* and *png++* and place it near the main.cpp.
 
 # libpng
