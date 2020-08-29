@@ -22,7 +22,8 @@ void write_png_file(
 void process_png_file(
   png_bytep *row_pointers,
   png_uint_32 width,
-  png_uint_32 height
+  png_uint_32 height,
+  void (*transformer)(int, int, png_bytep, png_bytep, png_bytep*)
 );
 
 #endif

@@ -127,12 +127,14 @@ void write_png_file(
 void process_png_file(
   png_bytep *row_pointers,
   png_uint_32 width,
-  png_uint_32 height
+  png_uint_32 height,
+  void (*transformer)(int, int, png_bytep, png_bytep, png_bytep*)
 ) {
   for(int y = 0; y < height; y++) {
     png_bytep row = row_pointers[y];
     for(int x = 0; x < width; x++) {
       png_bytep px = &(row[x * 4]);
+      transformer(x, y, px, row, row_pointers);
       // Do something awesome for each pixel here...
       // printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
     }
