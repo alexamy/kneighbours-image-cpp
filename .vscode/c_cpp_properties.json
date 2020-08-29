@@ -6,6 +6,7 @@
                 "C:\\mingw64\\vendor\\libpng",
                 "C:\\mingw64\\vendor\\png++",
                 "${workspaceFolder}",
+                "${workspaceFolder}\\libs",
                 "${default}"
             ],
             "intelliSenseMode": "msvc-x64",

@@ -8,8 +8,10 @@
       "args": [
         "-g",
         "main.c",
+        "libs/libpng_wrapper.c",
         "-o",
         "main.exe",
+        "-I./libs",
         "-I${env:MINGW_PATH}/vendor/libpng",
         "-L${env:MINGW_PATH}/vendor/libpng",
         "-lpng",
