@@ -14,3 +14,7 @@ cp libpng14.dll pngtest-stat.exe pngtest.exe /usr/local/bin
 
 # png++
 replace `error.hpp:108` with `return std::string("");`
+
+# Использование
+
+Передать первым аргументом PNG файл (или перетащить на файл программы).
